@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1069201209353",
+    "firebase_url": "https://chat-ramue.firebaseio.com",
+    "project_id": "chat-ramue",
+    "storage_bucket": "chat-ramue.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069201209353:android:055e38bed5aef635",
+        "android_client_info": {
+          "package_name": "com.chatramue"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069201209353-sn407jf0n03cg13tm6i4mk26u0s21uih.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKb3jFMyG5cNqFZ1pWPt3Hw1C24UZaONM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069201209353-sn407jf0n03cg13tm6i4mk26u0s21uih.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
