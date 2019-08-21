@@ -6,12 +6,19 @@ import login from '../../screens/login'
 import Registerx from '../../screens/Registerx'
 import sider from '../../screens/sideeffect'
 import auth from '../../screens/auth'
+import friendlist from '../../screens/friendlist'
+import profile from '../../screens/profile'
+import profileTeman from '../../screens/profileTeman'
+import chat from '../../screens/chat'
+
+
 
 const authLoading = createStackNavigator(
   {auth}
 )
 const AppNavigator = createStackNavigator(
   {
+    
     register:{
       screen: Registerx,
       navigationOptions: () => ({
@@ -21,22 +28,46 @@ const AppNavigator = createStackNavigator(
     login:{
       screen: login,
       navigationOptions: {
-        
         header: null
       },
     },
-      home:{
-        screen: Home,
-        navigationOptions: () => ({
-          header: null
-        }),
-      },
-      leaderboard:{
-        screen:leaderboard,
-        navigationOptions:{
-          title:"LEADER BOARD"
-        }
-      },
+    chat:{
+      screen: chat,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
+    home:{
+      screen: Home,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
+    leaderboard:{
+      screen:leaderboard,
+      navigationOptions:{
+        title:"LEADER BOARD"
+      }
+    },
+    profile:{
+      screen: profile,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
+    profileTeman:{
+      screen: profileTeman,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
+    friendlist:{
+      screen: friendlist,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
+    
   }
 )
 const DrawerNavigator = createDrawerNavigator(
@@ -47,7 +78,6 @@ const DrawerNavigator = createDrawerNavigator(
   })
 
   export default createAppContainer(createSwitchNavigator({
-  
     DrawerNavigator,
     authLoading,
   }))

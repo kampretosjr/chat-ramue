@@ -119,10 +119,7 @@ _handleRegister = () => {
     });
   }
   render() {
-    console.log("usernmae",this.state.username)
-    console.log("email",this.state.email)
-    console.log("phone",this.state.phone)
-    console.log("password",this.state.password)
+
 
     const registrasiAdd = () => {
       this.setState({
@@ -156,6 +153,7 @@ _handleRegister = () => {
           alert("Gagal " + err);
         });
     };
+    console.warn("ft",this.state.ImageSource)
     return (
       <View style={styles.root}>
         <Image

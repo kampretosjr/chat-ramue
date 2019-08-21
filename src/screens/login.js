@@ -29,7 +29,7 @@ export default class Login extends Component {
 _handleLogin = async () => {
   const { email, password } = this.state
   if (email === '' || password === '') {
-      alert('Oops form ada yang kosong isi dengan lengkap yah')
+      alert('ngisi yang bener masih ada yg kososong tuh')
   } else {
       Database.ref('/user').orderByChild('email').equalTo(email).once('value', (result) => {
           let data = result.val()
@@ -38,9 +38,12 @@ _handleLogin = async () => {
           if (data !== null) {
               let users = Object.values(data)
 
+              storage.setItem('userid', users[0].uid)
               storage.setItem('email', users[0].email)
               storage.setItem('username', users[0].username)
               storage.setItem('avatar', users[0].avatar)
+              storage.setItem('phone', users[0].phone)
+
               console.warn("datapribadi", users[0])
           }
       })
@@ -53,10 +56,7 @@ _handleLogin = async () => {
           })
           .catch(error => {
               alert(error.message)
-              this.setState({
-                  email: '',
-                  password: ''
-              })
+              
           })
   }
 }

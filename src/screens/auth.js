@@ -11,7 +11,7 @@ export class AuthLoading extends Component {
     _handleAuth = async () => {
         const uid = await storage.getItem('userid')
 
-        this.props.navigation.navigate(uid ? 'home' : 'auth')
+        this.props.navigation.navigate(uid ? 'home' : 'login')
     }
 
     render() {
