@@ -4,6 +4,7 @@ import { Fab, Icon } from 'native-base'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import GetLocation from 'react-native-get-location'
 import { Database } from '../public/firebaseConfig'
+import Geocoder from 'react-native-geocoder'
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -17,7 +18,8 @@ export default class Home extends Component {
 			longitude: 0,
 			users: [],
 			isModalVisible: false,
-			time:null
+			time:null,
+			address:""
 			}
 		}
 
@@ -33,7 +35,7 @@ export default class Home extends Component {
 			this.getCurrentPosition()
 			await this.user()
 			this.setState({
-				time:setInterval(() => this.updateLocation(), 5000)
+				time:setInterval(() => this.updateLocation(), 5000000)
 			})
 	}
 
@@ -41,14 +43,13 @@ export default class Home extends Component {
 		
 		const { userid } = this.state
 		Database.ref('/user').orderByChild('userid').equalTo(userid).once('value', (result) => {
-
-				Database.ref('/user/' + userid).update({ latitude: this.state.latitude, longitude: this.state.longitude })
+			Database.ref('/user/' + userid).update({ latitude: this.state.latitude, longitude: this.state.longitude })
 		})
 }
 	getCurrentPosition() {
 			GetLocation.getCurrentPosition({
 					enableHighAccuracy: true,
-					timeout: 15000,
+					// timeout: 15000,
 			})
 					.then(location => {
 						console.warn(location.latitude);
@@ -91,71 +92,73 @@ export default class Home extends Component {
 	
 	}
 	
-    render() {
+	geocode = async (lat,lng) => {
+		var Location = {lat,lng};
 		
-        // console.warn("longitude", this.state.longitude)
-        // console.warn("latitude", this.state.latitude)
-        console.warn("dasssta", this.state.userid)
-        return (
-            <>
-                <StatusBar translucent={true} backgroundColor="transparent" barStyle="dark-content" />
-                <View style={styles.container}>
-                    <MapView
-                        provider={PROVIDER_GOOGLE}
-                        showsMyLocationButton={true}
-                        showsIndoorLevelPicker={true}
-                        showsUserLocation={true}
-                        zoomControlEnabled={true}
-                        showsCompass={true}
-                        showsTraffic={true}
-                        showsBuildings={true}
-                        showsScale={true}
-                        style={styles.map}
-                        region={this.state.mapRegion}
-                    >
-                        {
-                            this.state.users.map((item) => {
-                                return (
-                                    <Marker
-                                        onPress={this.modalControl}
-                                        coordinate={{
-                                            latitude: item.latitude,
-                                            longitude: item.longitude,
-                                        }}
-                                        title={item.fullname}
-                                        description={`${item.latitude} / ${item.longitude}`}
-                                        key={item.uid}
-                                    >
-                                        <View>
-                                            <Icon name='pin' type='Ionicons' style={{ color: 'steelblue', fontSize: 50 }} />
-                                            <Image
-                                                source={{ uri: item.avatar }}
-                                                style={{ width: 26, height: 26, borderRadius: 100 / 2, position: 'absolute', bottom: 18, left: 3 }}
-                                            />
-                                        </View>
+		Geocoder.geocodePosition(Location).then(res => {
+			const address =  res[0].subLocality+", "+res[0].subAdminArea+", "+res[0].adminArea+", "+res[0].country
+			this.setState({ address:address})
+			alert("adress",address)
 
-                                    </Marker>
-                                )
-                            })
-                        }
-                    </MapView>
+		})
 
-                    <Fab
-                        position="bottomRight"
-                        onPress={() => this.clear()}
-                    >
-                        <Icon name="people" type="Ionicons" />
-                    </Fab>
-                    <Fab
-                        position="bottomRight"
-                        onPress={() => this.getCurrentPosition()}
-                        style={{ marginVertical: 80, backgroundColor: 'white' }}
-                    >
-                        <Icon name="locate" type="Ionicons" style={{ color: 'steelblue' }} />
-                    </Fab>
-                </View>
-            </>
-        )
+	}
+
+    render() {
+			var Location = {
+				lat: this.state.latitude,
+				lng: this.state.longitude
+			};
+			// Geocoder.geocodePosition(Location).then(res => {
+			// 	const address =  res[0].subLocality+", "+res[0].subAdminArea+", "+res[0].adminArea+", "+res[0].country
+			// 	this.setState({ address:address})
+			// })
+			return (
+				<>
+					<View style={styles.container}>
+						<MapView
+							provider={PROVIDER_GOOGLE}
+							showsMyLocationButton={true}
+							showsUserLocation={true}
+							zoomControlEnabled={true}
+							showsTraffic={true}
+							style={styles.map}
+							region={this.state.mapRegion}
+							>
+							{
+								this.state.users.map((item) => {
+									return (
+										<>
+										
+										<Marker
+												coordinate={{	latitude: item.latitude,	longitude: item.longitude,}}
+												// description={this.geocode(item.latitude,item.longitude)}
+												description={`${item.latitude} / ${item.longitude}`}
+												title={item.username}
+												key={item.uid}
+										>
+											<View>
+												<Icon name='pin' type='Ionicons' style={{ color: 'steelblue', fontSize: 50 }} />
+												<Image	source={{ uri: item.avatar }}	style={{ width: 26, height: 26, borderRadius: 100 / 2, position: 'absolute', bottom: 18, left: 3 }}/>
+											</View>
+										</Marker>
+										
+										</>
+									)
+								})
+							}
+						</MapView>
+
+							<Fab position="bottomRight" onPress={() => this.clear()} >
+								<Icon name="people" type="Ionicons" />
+							</Fab>
+
+							<Fab position="bottomRight" onPress={() => this.getCurrentPosition()} style={{ marginVertical: 80, backgroundColor: 'white' }} >
+								<Icon name="locate" type="Ionicons" style={{ color: 'steelblue' }} />
+							</Fab>
+					</View>
+				</>
+			)
     }
 }
 

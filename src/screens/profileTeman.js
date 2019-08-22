@@ -53,7 +53,7 @@ export default class CardShowcaseExample extends Component {
           <Text style={styles.text3}>phone</Text>
         </View>
 
-        <Text style={styles.text4}>online</Text>
+        <Text style={styles.text4}>{dataProfile.status}</Text>
 
         <Text style={styles.follow}>follow juga di </Text>
           <Card style={{top:"55%"}}>

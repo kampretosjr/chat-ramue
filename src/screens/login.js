@@ -26,7 +26,7 @@ export default class Login extends Component {
         password: ''
     }
 }
-_handleLogin = async () => {
+loginButton = async () => {
   const { email, password } = this.state
   if (email === '' || password === '') {
       alert('ngisi yang bener masih ada yg kososong tuh')
@@ -48,15 +48,14 @@ _handleLogin = async () => {
           }
       })
 
-      await Auth.signInWithEmailAndPassword(email, password)
+        await Auth.signInWithEmailAndPassword(email, password)
           .then((response) => {
-              Database.ref('/user/' + response.user.uid).update({ status: 'online' })
-              storage.setItem('userid', response.user.uid)
-              this.props.navigation.navigate('auth')
+            Database.ref('/user/' + response.user.uid).update({ status: 'online' })
+            storage.setItem('userid', response.user.uid)
+            this.props.navigation.navigate('auth')
           })
           .catch(error => {
-              alert(error.message)
-              
+            alert(error.message)
           })
   }
 }
@@ -83,7 +82,7 @@ _handleLogin = async () => {
           </View>
         </Center>
 
-        <TouchableOpacity onPress={() => this._handleLogin()} style={styles.buttonkanan}>
+        <TouchableOpacity onPress={() => this.loginButton()} style={styles.buttonkanan}>
           <Icon name={"logout-variant"} type={"MaterialCommunityIcons"} style={styles.icon}/>
         </TouchableOpacity>
 

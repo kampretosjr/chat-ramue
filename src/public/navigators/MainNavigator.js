@@ -18,7 +18,12 @@ const authLoading = createStackNavigator(
 )
 const AppNavigator = createStackNavigator(
   {
-    
+    home:{
+      screen: Home,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
     register:{
       screen: Registerx,
       navigationOptions: () => ({
@@ -37,12 +42,7 @@ const AppNavigator = createStackNavigator(
         header: null
       }),
     },
-    home:{
-      screen: Home,
-      navigationOptions: () => ({
-        header: null
-      }),
-    },
+    
     leaderboard:{
       screen:leaderboard,
       navigationOptions:{
@@ -55,18 +55,13 @@ const AppNavigator = createStackNavigator(
         header: null
       }),
     },
-    profileTeman:{
-      screen: profileTeman,
-      navigationOptions: () => ({
-        header: null
-      }),
-    },
     friendlist:{
       screen: friendlist,
       navigationOptions: () => ({
         header: null
       }),
     },
+    
     
   }
 )
