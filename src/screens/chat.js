@@ -37,8 +37,7 @@ export class Chat extends Component {
     }
 
     componentWillMount() {
-        console.warn('uid1', Auth.currentUser.uid)
-        console.warn('uid2', this.state.datauser.id)
+       
         Database.ref('messages').child(Auth.currentUser.uid).child(this.state.datauser.id)
             .on('child_added', (value) => {
                 this.setState((prevState) => {
@@ -90,7 +89,6 @@ export class Chat extends Component {
 
     render() {
         const { datauser } = this.state
-        console.warn("status",datauser.status)
         // console.warn('Data user: ', datauser.id)
         // console.warn('current id: ', Auth.currentUser.uid)
         return (

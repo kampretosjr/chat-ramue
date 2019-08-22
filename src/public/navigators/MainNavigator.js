@@ -18,12 +18,7 @@ const authLoading = createStackNavigator(
 )
 const AppNavigator = createStackNavigator(
   {
-    home:{
-      screen: Home,
-      navigationOptions: () => ({
-        header: null
-      }),
-    },
+    
     register:{
       screen: Registerx,
       navigationOptions: () => ({
@@ -62,7 +57,12 @@ const AppNavigator = createStackNavigator(
       }),
     },
     
-    
+    home:{
+      screen: Home,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
   }
 )
 const DrawerNavigator = createDrawerNavigator(

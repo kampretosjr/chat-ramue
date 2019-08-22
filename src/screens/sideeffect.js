@@ -71,29 +71,29 @@ export class Drawer extends Component {
                 </TouchableOpacity>
 
                 <List>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('home')}>
-                    <ListItem>
-                      <Left>
-                        <Text style={styles.txtMenu}><Icon name="map" type="Ionicons" style={styles.iconStyle} /> Map</Text>
-                      </Left>
-                    </ListItem>
-                  </TouchableOpacity>
+                  
                   
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('friendlist')}>
                       <ListItem>
                         <Left>
-                          <Text style={styles.txtMenu}><Icon name="people" type="Ionicons" style={styles.iconStyle} /> Friend List</Text>
+                          <Text style={styles.txtMenu}><Icon name="contacts" type="Ionicons" style={styles.iconStyle} /> Friend List</Text>
                         </Left>
                       </ListItem>
                     </TouchableOpacity>
                   
-                    
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('home')}>
+                    <ListItem>
+                      <Left>
+                        <Text style={styles.txtMenu}><Icon name="navigate" type="Ionicons" style={styles.iconStyle} /> Friend location</Text>
+                      </Left>
+                    </ListItem>
+                  </TouchableOpacity>
                 </List> 
-                <List style={{top:"46%"}}>
+                <List style={{top:"40%"}}>
                   <TouchableOpacity onPress={() => this._handleLogout()}>
                     <ListItem >
                       <Left>
-                        <Text style={styles.txtMenu}><Icon name="exit" type="Ionicons" style={[styles.iconStyle, { color: 'red' }]} /> Logout</Text>
+                        <Text style={styles.txtMenu}><Icon name="share-alt" type="Ionicons" style={[styles.iconStyle, { color: 'red' }]} /> Logout</Text>
                       </Left>
                     </ListItem>
                   </TouchableOpacity>
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     iconStyle: {
-        color: 'steelblue',
-        fontSize: 20,
+        color: 'black',
+        fontSize: 30,
     },
     txtEmail: {
         color: 'white',

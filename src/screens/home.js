@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Text, View, StyleSheet, StatusBar, AsyncStorage , Image } from 'react-native'
+import { Button, Text,Alert, View, StyleSheet, StatusBar, AsyncStorage , Image } from 'react-native'
 import { Fab, Icon } from 'native-base'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import GetLocation from 'react-native-get-location'
@@ -7,6 +7,7 @@ import { Database } from '../public/firebaseConfig'
 import Geocoder from 'react-native-geocoder'
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { auth } from 'firebase';
 
 export default class Home extends Component {
 	constructor(props) {
@@ -43,7 +44,7 @@ export default class Home extends Component {
 		
 		const { userid } = this.state
 		Database.ref('/user').orderByChild('userid').equalTo(userid).once('value', (result) => {
-			Database.ref('/user/' + userid).update({ latitude: this.state.latitude, longitude: this.state.longitude })
+			Database.ref('/user/' + userid).update({latitude: this.state.latitude, longitude: this.state.longitude })
 		})
 }
 	getCurrentPosition() {
@@ -57,8 +58,8 @@ export default class Home extends Component {
 						let region = {
 							latitude: location.latitude,
 							longitude: location.longitude,
-							latitudeDelta: 0.00922 * 1.5,
-							longitudeDelta: 0.00421 * 1.5
+							latitudeDelta: 1,
+							longitudeDelta: 1
 						}
 
 						this.setState({
@@ -92,27 +93,80 @@ export default class Home extends Component {
 	
 	}
 	
-	geocode = async (lat,lng) => {
+	geocode = async (lat,lng,item) => {
 		var Location = {lat,lng};
-		
-		Geocoder.geocodePosition(Location).then(res => {
-			const address =  res[0].subLocality+", "+res[0].subAdminArea+", "+res[0].adminArea+", "+res[0].country
-			this.setState({ address:address})
-			alert("adress",address)
+		var UID = await AsyncStorage.getItem("userid")
+		Geocoder.geocodePosition(Location).then(async res => {
+			const address =  res[0].subLocality+", "+res[0].subAdminArea+", "+res[0].adminArea
+			{ item.id !== this.state.userid ? 
+				// Alert.alert(
+				// 	"si " + item.username + ", lagi ada di",
+				// 	address,
+				// 	[
+				// 		{text: 'Ajak chat',onPress: () =>this.props.navigation.navigate('chat', { data: item })},
+				// 		{text: 'OK', onPress: () => console.log('OK Pressed')},
+				// 	],
+				// 	{cancelable: false},
+				// )
+				Alert.alert(
+					"si " + item.username + ", lagi ada di",
+					address,
+					[
+						{text: 'Ga mau', onPress: () => console.log('OK Pressed')},
+						{text: 'Ajak chat',onPress: () =>this.props.navigation.navigate('chat', { data: item })},
+						{text: '', onPress: () => console.log('OK Pressed')},
+						
 
-		})
+					],
+					{cancelable: false},
+				):
+				Alert.alert(
+					"Loe lagi ada di ",
+					address,
+					[
+						{text: 'OK', onPress: () => console.log('OK Pressed')},
+					],
+					{cancelable: false},
+				);
+			}
+			// if(item.userid !== this.state.userid){
+			// 	Alert.alert(
+			// 		"si " + item.username + ", lagi ada di",
+			// 		address,
+			// 		[
+			// 			{text: 'Ajak chat',onPress: () =>this.props.navigation.navigate('chat', { data: item })},
+			// 			{text: 'OK', onPress: () => console.log('OK Pressed')},
+			// 		],
+			// 		{cancelable: false},
+			// 	);
+			// }else{
+			// 	Alert.alert(
+			// 		"Loe lagi ada di ",
+			// 		address,
+			// 		[
+			// 			{text: 'OK', onPress: () => console.log('OK Pressed')},
+			// 		],
+			// 		{cancelable: false},
+			// 	);
+			// }
+
+
+		}).catch(err => alert(err))
+	
 
 	}
 
     render() {
+
 			var Location = {
 				lat: this.state.latitude,
 				lng: this.state.longitude
 			};
+			
 			// Geocoder.geocodePosition(Location).then(res => {
 			// 	const address =  res[0].subLocality+", "+res[0].subAdminArea+", "+res[0].adminArea+", "+res[0].country
 			// 	this.setState({ address:address})
-			// })
+			// }).catch(err => alert(err))
 			return (
 				<>
 					<View style={styles.container}>
@@ -131,11 +185,12 @@ export default class Home extends Component {
 										<>
 										
 										<Marker
-												coordinate={{	latitude: item.latitude,	longitude: item.longitude,}}
-												// description={this.geocode(item.latitude,item.longitude)}
-												description={`${item.latitude} / ${item.longitude}`}
-												title={item.username}
-												key={item.uid}
+											coordinate={{	latitude: item.latitude,	longitude: item.longitude,}}
+											description={item.id !== this.state.userid ? item.status:""}
+											// description={`${item.latitude} / ${item.longitude}`}
+											title={item.username}
+											key={item.id}
+											onPress={ ()=> this.geocode(item.latitude,item.longitude,item)}
 										>
 											<View>
 												<Icon name='pin' type='Ionicons' style={{ color: 'steelblue', fontSize: 50 }} />
