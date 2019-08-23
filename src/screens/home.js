@@ -204,11 +204,11 @@ export default class Home extends Component {
 							}
 						</MapView>
 
-							<Fab position="bottomRight" onPress={() => this.clear()} >
+							{/* <Fab position="bottomRight" onPress={() => this.clear()} >
 								<Icon name="people" type="Ionicons" />
-							</Fab>
+							</Fab> */}
 
-							<Fab position="bottomRight" onPress={() => this.getCurrentPosition()} style={{ marginVertical: 80, backgroundColor: 'white' }} >
+							<Fab position="bottomRight" onPress={() => this.getCurrentPosition()} style={{  backgroundColor: 'white' }} >
 								<Icon name="locate" type="Ionicons" style={{ color: 'steelblue' }} />
 							</Fab>
 					</View>

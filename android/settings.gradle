@@ -12,7 +12,5 @@ project(':react-native-vector-icons').projectDir = new File(rootProject.projectD
 include ':react-native-get-location'
 project(':react-native-get-location').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-get-location/android')
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
-include ':react-native-reverse-geocode'
-project(':react-native-reverse-geocode').projectDir = new File(rootProject.projectDir, 	'../node_modules/@kiwicom/react-native-reverse-geocode/android')
 include ':app'
 

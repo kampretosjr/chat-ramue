@@ -118,14 +118,7 @@ export class Chat extends Component {
                         </MarqueeText>
                         <Subtitle>{datauser.status}</Subtitle>
                     </Body>
-                    <Right>
-                      <Button transparent onPress={() => alert('pencetan')}>
-                        <Icon name="videocam" type="Ionicons" style={styles.iconStyle} />
-                      </Button>
-                      <Button transparent onPress={() => alert('pencetan')}>
-                        <Icon name="call" type="Ionicons" style={styles.iconStyle} />
-                      </Button>
-                    </Right>
+                    
                 </Header>
                 <GiftedChat
                     text={this.state.text} showUserAvatar={true}

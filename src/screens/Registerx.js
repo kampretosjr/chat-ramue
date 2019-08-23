@@ -12,10 +12,34 @@ import Icon from "@builderx/icons";
 import { Center } from "@builderx/utils";
 import ImagePicker from "react-native-image-picker";
 import Input from "../symbols/Input";
-import { Database, Auth } from '../public/firebaseConfig'
+import { Database, Auth ,Storage} from '../public/firebaseConfig'
 import ButtonNavigate from "../symbols/buttonLogin";
 import Button from "../symbols/buttonFungsi";
 import GetLocation from 'react-native-get-location'
+import RNFetchBlob from 'rn-fetch-blob'
+
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
+// const Fetch = RNFetchBlob.polyfill.Fetch
+// // replace built-in fetch
+// window.fetch = new Fetch({
+//     // enable this option so that the response data conversion handled automatically
+//     auto : true,
+//     // when receiving response data, the module will match its Content-Type header
+//     // with strings in this array. If it contains any one of string in this array, 
+//     // the response body will be considered as binary data and the data will be stored
+//     // in file system instead of in memory.
+//     // By default, it only store response data to file system when Content-Type 
+//     // contains string `application/octet`.
+//     binaryContentTypes : [
+//         'image/',
+//         'video/',
+//         'audio/',
+//         'foo/',
+//     ]
+// }).build()
 
 export default class Register extends Component {
   constructor(props) {
@@ -23,6 +47,7 @@ export default class Register extends Component {
 
     this.state = {
       ImageSource: null,
+      ImageSourceMentahan: null,
       spinner: false,
       username: '',
       email: '',
@@ -40,7 +65,6 @@ export default class Register extends Component {
 getCurrentPosition() {
     GetLocation.getCurrentPosition({
         enableHighAccuracy: true,
-        timeout: 15000,
     })
         .then(location => {
             console.warn(location.latitude);
@@ -65,39 +89,87 @@ getCurrentPosition() {
 }
 
 _handleRegister = () => {
-    if (this.state.username === '' || this.state.email === '' || this.state.password === '') {
-        alert('ngisi yang bener ,ada yg kosong tuh')
-    } else {
-        Auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then((response) => {
-                console.warn(response)
-                Database.ref('/user/' + response.user.uid).set({
-                    username: this.state.username,
-                    phone: this.state.phone,
-                    status: 'offline',
-                    email: this.state.email,
-                    avatar: 'https://res.cloudinary.com/dnqtceffv/image/upload/v1566043986/srhwjzljnfq79cg2glov.png',
-                    latitude: this.state.latitude,
-                    longitude: this.state.longitude
-                })
-                this.props.navigation.navigate('login')
-            })
-            .catch(error => {
-                alert(error.message)
+  if (this.state.username === '' || this.state.email === '' || this.state.password === '') {
+    alert('ngisi yang bener ,ada yg kosong tuh')
+}else {
+  var uploadUri = this.state.ImageSourceMentahan.uri
+  var imgSource = this.state.ImageSourceMentahan.fileName
+  var uploadBlob = null
+  var imageRef = Storage.ref('posts').child(imgSource)
+  var mime = 'image/jpg'
+ 
+  // Auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+  //           .then((response) => {
+  //               console.warn(response)
+  //               Database.ref('/user/' + response.user.uid).set({
+  //                   username: this.state.username,
+  //                   phone: this.state.phone,
+  //                   status: 'offline',
+  //                   email: this.state.email,
+  //                   avatar: 'https://firebasestorage.googleapis.com/v0/b/chat-ramue.appspot.com/o/posts%2Fimage-8b268f96-70f7-4088-be91-9d8deb15c499.jpg?alt=media&token=2379c99f-f5de-450e-bb0b-beae6e56f8e2',
+  //                   latitude: this.state.latitude,
+  //                   longitude: this.state.longitude
+  //               })
+  //               this.props.navigation.navigate('login')
+  //           })
+  //           .catch(error => {
+  //               alert(error.message)
                 
 
-                this.props.navigation.navigate('Register')
-            })
-    }
+  //               this.props.navigation.navigate('Register')
+  //           })
+  return new Promise((resolve, reject) => {
+
+              fs.readFile(uploadUri, 'base64')
+                .then((data) => { return Blob.build(data, { type: `${mime};BASE64` }) })
+                .then((blob) => { 
+                    uploadBlob = blob
+                    return imageRef.put(blob, { contentType: mime })
+                })
+                .then(() => {
+                    uploadBlob.close()
+                    return imageRef.getDownloadURL()
+                })
+                .then((url) => {
+                    resolve(url)
+                    Auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+                    .then((response) => {
+                        console.log("ssss",response)
+                        Database.ref('/user/' + response.user.uid).set({
+                            id:response.user.uid,
+                            username: this.state.username,
+                            phone: this.state.phone,
+                            status: 'offline',
+                            email: this.state.email,
+                            avatar: url,
+                            latitude: this.state.latitude || 0,
+                            longitude: this.state.longitude || 0
+                        })
+                        this.props.navigation.navigate('login')
+                    })
+                    .catch(error => {
+                        alert(error.message)
+                        this.props.navigation.navigate('register')
+                    })
+                    //Database.ref('/user/' + this.state.myid).update({ avatar: url })
+                    this.setState({
+                        imgSource: ''
+                    })
+                    alert('Foto Profile Berhasil di update')
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+             })
+              }
+   
 }
   selectPhotoTapped() {
     const options = {
       quality: 1.0,
       maxWidth: 500,
       maxHeight: 500,
-      storageOptions: {
-        skipBackup: true
-      }
+      storageOptions: {skipBackup: true}
     };
 
     ImagePicker.showImagePicker(options, response => {
@@ -112,48 +184,19 @@ _handleRegister = () => {
       } else {
         let source = { uri: response };
         this.setState({
-          ImageSource: source
+          ImageSource: source,
         });
+        if (response.uri) {
+          this.setState({ ImageSourceMentahan: response })
+      }
       }
       
     });
   }
   render() {
 
-
-    const registrasiAdd = () => {
-      this.setState({
-        spinner: true
-      });
-      const dataFile = new FormData();
-      dataFile.append("username", this.state.username);
-      dataFile.append("password", this.state.password);
-      dataFile.append("email", this.state.email);
-      dataFile.append("foto", {
-        name: this.state.ImageSource.uri.fileName,
-        type: this.state.ImageSource.uri.type || null,
-        uri: this.state.ImageSource.uri.uri
-      });
-      add(dataFile);
-    };
-    let add = async data => {
-      await this.props
-        .dispatch(registPlayer(data))
-        .then(() => {
-          this.setState({
-            spinner: false
-          });
-          alert("Success !!!");
-          this.props.navigation.navigate('bridge');
-        })
-        .catch(err => {
-          this.setState({
-            spinner: false
-          });
-          alert("Gagal " + err);
-        });
-    };
-    console.warn("ft",this.state.ImageSource)
+    console.log("ft",this.state.ImageSource)
+    console.log("fto mentah",this.state.ImageSourceMentahan != null ? this.state.ImageSourceMentahan.fileName : "")
     return (
       <View style={styles.root}>
         <Image

@@ -10,6 +10,7 @@ import friendlist from '../../screens/friendlist'
 import profile from '../../screens/profile'
 import profileTeman from '../../screens/profileTeman'
 import chat from '../../screens/chat'
+import splash from '../../screens/splash'
 
 
 
@@ -56,7 +57,12 @@ const AppNavigator = createStackNavigator(
         header: null
       }),
     },
-    
+    profileTeman:{
+      screen: profileTeman,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
     home:{
       screen: Home,
       navigationOptions: () => ({

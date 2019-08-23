@@ -1,5 +1,5 @@
 package com.chatramue;
-import com.kiwi.reversegeocode.RNReverseGeocodePackage;
+// import com.kiwi.reversegeocode.RNReverseGeocodePackage;
 import android.app.Application;
 import android.util.Log;
 // import com.airbnb.android.react.maps.MapsPackage;

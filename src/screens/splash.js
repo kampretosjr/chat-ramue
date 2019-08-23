@@ -1,7 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image,ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image,ActivityIndicator,AsyncStorage } from "react-native";
 
 export default class Untitled extends Component {
+  constructor(props) {
+    super(props);
+  }
+  _authorization =async ()=> {
+    this.props.navigation.navigate('register')
+  }
   render() {
     return (
       <View style={styles.root}>

@@ -7,7 +7,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  TextInput,AsyncStorage as storage
+  TextInput,AsyncStorage
 } from "react-native";
 import Icon from "@builderx/icons";
 import { Center } from "@builderx/utils";
@@ -29,34 +29,38 @@ export default class Login extends Component {
 loginButton = async () => {
   const { email, password } = this.state
   if (email === '' || password === '') {
-      alert('ngisi yang bener masih ada yg kososong tuh')
+      alert('ngisi yang bener masih ada field yg kososong')
   } else {
-      Database.ref('/user').orderByChild('email').equalTo(email).once('value', (result) => {
-          let data = result.val()
-          console.warn("datanya: ", data)
-
-          if (data !== null) {
-              let users = Object.values(data)
-
-              storage.setItem('userid', users[0].uid)
-              storage.setItem('email', users[0].email)
-              storage.setItem('username', users[0].username)
-              storage.setItem('avatar', users[0].avatar)
-              storage.setItem('phone', users[0].phone)
-
-              console.warn("datapribadi", users[0])
-          }
-      })
-
-        await Auth.signInWithEmailAndPassword(email, password)
+      await Auth.signInWithEmailAndPassword(email, password)
           .then((response) => {
             Database.ref('/user/' + response.user.uid).update({ status: 'online' })
-            storage.setItem('userid', response.user.uid)
-            this.props.navigation.navigate('auth')
+            AsyncStorage.setItem('userid', response.user.uid)
+            
+            Database.ref('/user').orderByChild('email').equalTo(email).once('value', (result) => {
+              let data = result.val()
+              console.warn("datanya: ", data)
+    
+              if (data !== null) {
+                  let users = Object.values(data)
+    
+                  AsyncStorage.setItem('userid', users[0].uid)
+                  AsyncStorage.setItem('email', users[0].email)
+                  AsyncStorage.setItem('username', users[0].username)
+                  AsyncStorage.setItem('avatar', users[0].avatar)
+                  AsyncStorage.setItem('phone', users[0].phone)
+                  this.props.navigation.navigate('auth')
+                  console.warn("datapribadi", users[0])
+              }
+          })
           })
           .catch(error => {
+            
             alert(error.message)
           })
+
+      
+
+        
   }
 }
   render() {

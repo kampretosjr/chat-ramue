@@ -54,13 +54,13 @@ export class UserList extends Component {
                   return (
                     <List key={item.id}>
                       <ListItem avatar>
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => this.props.navigation.navigate('profileTeman', { data: item })}>
+                        <TouchableOpacity  onPress={() => this.props.navigation.navigate('profileTeman', { data: item })}>
                           <Left>
                             <Thumbnail source={{ uri: item.avatar }} />
                           </Left>
                         </TouchableOpacity>
                         <Body>
-                          <TouchableOpacity activeOpacity={0.7} onPress={() => this.props.navigation.navigate('chat', { data: item })}>
+                          <TouchableOpacity  onPress={() => this.props.navigation.navigate('chat', { data: item })}>
                             <Text>{item.username}</Text>
                             <Text note>{item.phone}</Text>
                           </TouchableOpacity>
