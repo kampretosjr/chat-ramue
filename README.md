@@ -1,12 +1,15 @@
 <h1 align="center">Wikapps Game</h1>
 <p align="center">
+  <img width="250" src="https://dpulze.com/wp/wp-content/uploads/2017/06/ChaTraMue-Logo-17.jpg"/>
+</p>
+
+  #
+  
+<p align="center">
   Built with 
 </p>
 <p align="center">
   <img width="250" src="https://cdn.worldvectorlogo.com/logos/react-native-firebase-1.svg"/>
-</p>
-<p align="center">
-  <img width="250" src="https://dpulze.com/wp/wp-content/uploads/2017/06/ChaTraMue-Logo-17.jpg"/>
 </p>
 
 
