@@ -1,6 +1,7 @@
-<h1 align="center">Wikapps Game</h1>
+<h1 align="center">Chat ra moee</h1>
 <p align="center">
   <img width="250" src="https://dpulze.com/wp/wp-content/uploads/2017/06/ChaTraMue-Logo-17.jpg"/>
+  simple chat app with gps tracking
 </p>
 
   #
