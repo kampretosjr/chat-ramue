@@ -49,7 +49,11 @@
 5. Type `react-native run-android` for run this app. ***Make sure your device is connected with debugging mode***.
 
 ## Screenshots
-
+<div align="center">
+    <img width="250" src="https://raw.githubusercontent.com/kampretosjr/Chat-ramue-FrontEnd/master/screenshoot/Screenshot_2019-09-01-21-58-43-215_com.chatramue.jpg">    
+    <img width="250" src="https://raw.githubusercontent.com/kampretosjr/Chat-ramue-FrontEnd/master/screenshoot/Screenshot_2019-09-01-21-58-57-126_com.chatramue.jpg">
+    <img width="250" src="https://raw.githubusercontent.com/kampretosjr/Chat-ramue-FrontEnd/master/screenshoot/Screenshot_2019-09-01-22-02-33-167_com.chatramue.jpg">
+</div>
 
 ## Release APK
 <a href="https://drive.google.com/file/d/1RNj5fWgeBNrsER470yqB2stZemFY5KbR/view?usp=sharing">
